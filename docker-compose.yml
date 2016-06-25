@@ -1,19 +1,17 @@
-backend:
-  image: php:5.6-fpm-alpine
-  restart: always
-  volumes:
-    - ./httpd/public-html:/docroot/html
+version: '2'
+services:
+  httpd:
+    build: httpd
+    volumes:
+      - ./httpd/public-html:/docroot/html
+    links:
+      - php
+    ports:
+      - 80:80
+    restart: always
+  php:
+    image: php:5.6-fpm-alpine
+    volumes:
+      - ./httpd/public-html:/docroot/html
+    restart: always
 
-frontend:
-  build: httpd
-  volumes:
-    - ./httpd/public-html:/docroot/html
-  links:
-    - backend:php
-  environment:
-    - ENV_VAR1=some_value
-  ports:
-    - 80:80
-  environment:
-    - VAR1=value
-  restart: always
